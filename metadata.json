@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Second Opinion: Audit Another AI",
+  "description": "Evaluate AI-generated answers against source material to find errors, verify quotes, and assess reasoning with verifiable evidence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

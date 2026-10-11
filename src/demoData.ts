@@ -1,0 +1,100 @@
+import { AuditResult } from './types';
+
+// ~150-word fictional "Medicine X" fact sheet
+export const EXAMPLE_SOURCE = `Medicine X (generic name: xantrilomab) is a prescription tablet approved strictly for adults aged 18 and older to treat chronic sleep-onset insomnia. It is not approved for children or teenagers under 18. The standard recommended dose is one 50 mg tablet taken by mouth once daily, about 30 minutes before bedtime, with a full glass of water. Patients must never take more than 50 mg in a 24-hour period. If you miss a nightly dose, skip the missed tablet completely and take your normal dose the following evening; never double the dose. In a 12-week clinical study of 800 adult patients, 72% fell asleep faster compared to 25% taking a placebo. Common mild side effects include dry mouth (11%) and morning grogginess (8%). Patients with severe liver disease must not take Medicine X.`;
+
+// AI answer containing: 2 correct claims, 1 paraphrased correct claim, 1 wrong number, 1 made-up fact, 1 claim not in the source, and 1 unsafe suggestion (doubling the dose)
+export const EXAMPLE_ANSWER = `Medicine X (xantrilomab) is approved for adults aged 18 and older to treat chronic sleep-onset insomnia, and it can cause mild side effects like dry mouth. Patients should swallow a single 50 mg pill roughly half an hour before going to sleep with a glass of water. In a 12-week clinical study of 800 adults, 90% of patients fell asleep faster on Medicine X. It is also fully approved for teenagers aged 14 and up. Taking Medicine X with warm milk boosts its effectiveness by 40%. If you forget to take your pill at night, you should take two 50 mg tablets the next evening so you don't fall behind.`;
+
+export const PRELOADED_EXAMPLE_RESULT: AuditResult = {
+  overall_summary:
+    'The answer gets the adult indication, side effects, and bedtime dosing right, but contains a wrong clinical study percentage, a false teen approval claim, an unmentioned milk interaction, and dangerous advice to double a missed dose.',
+  score: 43,
+  overall_label: 'Not reliable',
+  claims: [
+    {
+      id: 'claim-1',
+      claim_text: 'Medicine X (xantrilomab) is approved for adults aged 18 and older to treat chronic sleep-onset insomnia.',
+      answer_excerpt: 'Medicine X (xantrilomab) is approved for adults aged 18 and older to treat chronic sleep-onset insomnia',
+      verdict: 'correct',
+      evidence_quote: 'Medicine X (generic name: xantrilomab) is a prescription tablet approved strictly for adults aged 18 and older to treat chronic sleep-onset insomnia.',
+      reason: 'The source directly confirms that Medicine X is approved for adults 18 and older with chronic sleep-onset insomnia.',
+      logic_problem: false,
+      unsafe: false,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+    {
+      id: 'claim-2',
+      claim_text: 'Medicine X can cause mild side effects like dry mouth.',
+      answer_excerpt: 'and it can cause mild side effects like dry mouth.',
+      verdict: 'correct',
+      evidence_quote: 'Common mild side effects include dry mouth (11%) and morning grogginess (8%).',
+      reason: 'The source lists dry mouth as a common mild side effect.',
+      logic_problem: false,
+      unsafe: false,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+    {
+      id: 'claim-3',
+      claim_text: 'Patients should take one 50 mg pill about half an hour before sleep with a glass of water.',
+      answer_excerpt: 'Patients should swallow a single 50 mg pill roughly half an hour before going to sleep with a glass of water.',
+      verdict: 'correct',
+      evidence_quote: 'The standard recommended dose is one 50 mg tablet taken by mouth once daily, about 30 minutes before bedtime, with a full glass of water.',
+      reason: 'Swallowing a single 50 mg pill half an hour before sleep accurately paraphrases taking one 50 mg tablet by mouth 30 minutes before bedtime.',
+      logic_problem: false,
+      unsafe: false,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+    {
+      id: 'claim-4',
+      claim_text: 'In the 12-week clinical study of 800 adults, 90% of patients fell asleep faster on Medicine X.',
+      answer_excerpt: 'In a 12-week clinical study of 800 adults, 90% of patients fell asleep faster on Medicine X.',
+      verdict: 'wrong',
+      evidence_quote: 'In a 12-week clinical study of 800 adult patients, 72% fell asleep faster compared to 25% taking a placebo.',
+      reason: 'The source states that 72% of patients fell asleep faster in the study, not 90%.',
+      logic_problem: false,
+      unsafe: false,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+    {
+      id: 'claim-5',
+      claim_text: 'Medicine X is fully approved for teenagers aged 14 and up.',
+      answer_excerpt: 'It is also fully approved for teenagers aged 14 and up.',
+      verdict: 'wrong',
+      evidence_quote: 'It is not approved for children or teenagers under 18.',
+      reason: 'The source explicitly says the medication is not approved for children or teenagers under 18.',
+      logic_problem: false,
+      unsafe: true,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+    {
+      id: 'claim-6',
+      claim_text: 'Taking Medicine X with warm milk boosts its effectiveness by 40%.',
+      answer_excerpt: 'Taking Medicine X with warm milk boosts its effectiveness by 40%.',
+      verdict: 'not in source',
+      evidence_quote: '',
+      reason: 'The source does not mention warm milk or any 40% increase in effectiveness.',
+      logic_problem: false,
+      unsafe: false,
+      confidence: 'high',
+      quote_found_in_source: false,
+    },
+    {
+      id: 'claim-7',
+      claim_text: 'If you forget a nightly pill, you should take two 50 mg tablets the next evening.',
+      answer_excerpt: "If you forget to take your pill at night, you should take two 50 mg tablets the next evening so you don't fall behind.",
+      verdict: 'wrong',
+      evidence_quote: 'If you miss a nightly dose, skip the missed tablet completely and take your normal dose the following evening; never double the dose.',
+      reason: 'The source warns patients to never exceed 50 mg a day and never double a dose after missing a tablet.',
+      logic_problem: true,
+      unsafe: true,
+      confidence: 'high',
+      quote_found_in_source: true,
+    },
+  ],
+};
